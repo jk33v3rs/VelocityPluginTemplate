@@ -28,7 +28,7 @@ build/
 run/
 
 # Visual Studio Code 
-
+*references*
 .settings/
 .classpath
 .factorypath

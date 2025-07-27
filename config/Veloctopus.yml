@@ -1,0 +1,261 @@
+# Veloctopus Rising Configuration
+# Version: 1.0.0
+# Documentation: docs/02-CONFIGURATION-KEYS.md
+
+# Global Settings
+global:
+  version: "1.0.0"
+  debug_mode: false
+  log_level: "INFO"
+  startup_delay_seconds: 5
+  shutdown_timeout_seconds: 30
+
+# Core API Configuration
+api:
+  # Event system configuration (8-thread pool matching CPU cores)
+  event_bus:
+    thread_pool_size: 8
+    max_queue_size: 10000
+    event_timeout_seconds: 30
+  
+  # Message translation engine
+  translation:
+    max_message_length: 4096
+    rate_limit_per_minute: 60
+    format_validation: true
+    emoji_support: true
+
+# Database Configuration
+database:
+  # MariaDB Primary Database
+  mariadb:
+    host: "${VELOCTOPUS_DB_HOST:localhost}"
+    port: ${VELOCTOPUS_DB_PORT:3306}
+    database: "${VELOCTOPUS_DB_NAME:Veloctopus}"
+    username: "${VELOCTOPUS_DB_USERNAME:Veloctopus}"
+    password: "${VELOCTOPUS_DB_PASSWORD:changeme}"
+    
+    # Connection Pool Settings (HikariCP)
+    connection_pool:
+      minimum_connections: 5
+      maximum_connections: 20
+      connection_timeout_ms: 30000
+      idle_timeout_ms: 600000
+      max_lifetime_ms: 1800000
+    
+    # Performance Settings
+    performance:
+      use_ssl: false
+      timezone: "UTC"
+      charset: "utf8mb4"
+      
+  # Migration Settings
+  migrations:
+    auto_migrate: true
+    backup_before_migrate: true
+    migration_table: "schema_migrations"
+
+# Redis Cache Configuration
+cache:
+  redis:
+    host: "${VELOCTOPUS_REDIS_HOST:localhost}"
+    port: ${VELOCTOPUS_REDIS_PORT:6379}
+    password: "${VELOCTOPUS_REDIS_PASSWORD:}"
+    database: 0
+    
+    # Connection Pool Settings
+    connection_pool:
+      max_total: 20
+      max_idle: 10
+      min_idle: 2
+      timeout_ms: 5000
+    
+    # Cache Settings
+    cache_settings:
+      default_ttl_seconds: 3600
+      key_prefix: "Veloctopus:"
+      compression_enabled: true
+
+# Chat System Configuration
+chat:
+  # Global Chat Settings
+  global_chat:
+    enabled: true
+    format: "<gray>[<aqua>{server}</aqua>]</gray> <{rank_color}>{rank}</color> <white>{player}</white> <gray>></gray> {message}"
+    max_message_length: 256
+    cooldown_seconds: 1
+    
+  # Channel Configuration
+  channels:
+    global:
+      name: "Global"
+      permission: "Veloctopus.chat.global"
+      rate_limit: 60
+      format: "<gray>[<green>G</green>]</gray> <{rank_color}>{rank}</color> <white>{player}</white> <gray>></gray> {message}"
+    
+    staff:
+      name: "Staff"
+      permission: "Veloctopus.chat.staff"
+      rate_limit: 120
+      format: "<gray>[<red>STAFF</red>]</gray> <{rank_color}>{rank}</color> <white>{player}</white> <gray>></gray> {message}"
+  
+  # Filter Settings
+  filtering:
+    enabled: true
+    blocked_words: []
+    max_caps_percentage: 50
+    max_repeated_chars: 3
+
+# Discord Integration Configuration - Four Specialized Bot Architecture
+discord:
+  # Multi-Bot Configuration (Spicord-Inspired Architecture)
+  bots:
+    # Bot 1: Security Bard - Authority & Law Enforcement
+    security_bard:
+      token: "${VELOCTOPUS_DISCORD_SECURITY_TOKEN:}"
+      enabled: true
+      guild_id: "${DISCORD_GUILD_ID:}"
+      command_prefix: "!sb"
+      
+    # Bot 2: Flora - Rewards & Celebration (Semi-Automated)
+    flora:
+      token: "${VELOCTOPUS_DISCORD_FLORA_TOKEN:}"
+      enabled: true
+      guild_id: "${DISCORD_GUILD_ID:}"
+      command_prefix: "!flora"
+      
+    # Bot 3: May - Communications Hub
+    may:
+      token: "${VELOCTOPUS_DISCORD_MAY_TOKEN:}"
+      enabled: true
+      guild_id: "${DISCORD_GUILD_ID:}"
+      command_prefix: "!may"
+      
+    # Bot 4: ArchiveSMP Librarian - Knowledge & Research
+    librarian:
+      token: "${VELOCTOPUS_DISCORD_LIBRARIAN_TOKEN:}"
+      enabled: true
+      guild_id: "${DISCORD_GUILD_ID:}"
+      command_prefix: "!lib"
+
+# Whitelist System Configuration - VeloctopusProject Exact Workflow
+whitelist:
+  # Core Verification Settings
+  enabled: true
+  verification_command: "/mc"
+  verification_timeout_minutes: 10
+  
+  # VeloctopusProject Workflow Implementation
+  workflow:
+    # Discord Verification Command
+    discord_verification:
+      command: "/mc"
+      parameter_name: "playername"
+      require_exact_match: true
+      case_sensitive: false
+      
+    # Mojang API Verification
+    mojang_verification:
+      enabled: true
+      api_endpoint: "https://api.mojang.com/users/profiles/minecraft/"
+      rate_limit_per_minute: 60
+      timeout_seconds: 10
+      cache_duration_hours: 24
+      
+    # Geyser/Floodgate Support
+    geyser_support:
+      enabled: true
+      prefix: "."
+      strip_prefix_for_verification: true
+      preserve_prefix_in_game: true
+      
+    # Purgatory State (10-Minute Window)
+    purgatory:
+      enabled: true
+      duration_minutes: 10
+      hub_server: "hub"
+      allowed_servers: ["hub"]
+
+# Rank System Configuration - 25 Main Ranks × 7 Sub-Ranks = 175 Total
+ranks:
+  # VeloctopusProject 175 Combination System
+  definitions:
+    main_ranks:
+      bystander:
+        display_name: "Bystander"
+        color: "<dark_gray>"
+        weight: 100
+        base_xp_requirement: 0
+        
+      resident:
+        display_name: "Resident"
+        color: "<gray>"
+        weight: 200
+        base_xp_requirement: 500
+        
+      citizen:
+        display_name: "Citizen"
+        color: "<white>"
+        weight: 300
+        base_xp_requirement: 1500
+        
+      # ... 22 more ranks to implement
+        
+    sub_ranks:
+      novice:
+        display_name: "Novice"
+        multiplier: 1.0
+        suffix: ""
+        
+      apprentice:
+        display_name: "Apprentice"
+        multiplier: 1.1
+        suffix: "★"
+        
+      # ... 5 more sub-ranks to implement
+
+# XP System Configuration - Community-Weighted 4000-Endpoint System
+xp:
+  # Community-First Progression (60% community, 40% individual)
+  progression:
+    community_weight: 0.6
+    individual_weight: 0.4
+    
+  # XP Sources
+  sources:
+    chat_activity: 1
+    playtime_minutes: 2
+    community_mentoring: 25
+    peer_recognition: 50
+    
+  # Rate Limiting
+  limits:
+    max_xp_per_day: 5000
+    max_xp_per_week: 25000
+    max_xp_per_month: 75000
+
+# Python AI Bridge Configuration
+python_bridge:
+  # VelemonAId Integration
+  velemonaid:
+    enabled: false  # Disabled until Python backend available
+    api_url: "${PYTHON_API_URL:http://localhost:8000}"
+    timeout_seconds: 30
+    
+# Performance Configuration
+performance:
+  # Memory Management
+  memory:
+    max_heap_mb: 512
+    gc_optimization: true
+    
+  # Threading
+  threading:
+    main_thread_protection: true  # CRITICAL: Zero blocking operations
+    async_timeout_seconds: 30
+    
+  # Monitoring
+  monitoring:
+    performance_metrics: true
+    health_checks: true
+    correlation_ids: true

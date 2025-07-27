@@ -1,0 +1,1 @@
+{"type":"object","properties":{"request":{"type":"string","description":"What change or refactoring you want applied to the code"},"snippets":{"type":"string","description":"The code context/snippets to review and patch"}},"required":["request","snippets"]}

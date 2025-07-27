@@ -1,0 +1,24 @@
+{
+  "name": "velocityplugintemplate",
+  "version": "1.0.0",
+  "description": "[![Discord](https://img.shields.io/discord/899740810956910683?color=7289da&label=Discord)](https://discord.gg/5NMMzK5mAn)",
+  "main": "codereview.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jk33v3rs/VelocityPluginTemplate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jk33v3rs/VelocityPluginTemplate/issues"
+  },
+  "homepage": "https://github.com/jk33v3rs/VelocityPluginTemplate#readme"
+}
